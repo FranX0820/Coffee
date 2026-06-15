@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee - Customer Reviews</title>
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo">Coffee.</h1>
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="order.html">Order</a>
+            <a href="review.html">Rate Us</a>
+        </nav>
+    </header>
+
+    <main class="page-container">
+        <h2 class="page-title">What Our Coffee Lovers Say</h2>
+
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"Absolutely the best caramel macchiato I've ever had. The aroma hits you the moment you walk near. Highly recommended!"</p>
+                <span class="reviewer">- Alex M.</span>
+            </div>
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"The beans are perfectly roasted. You can tell they care about high quality. It has completely upgraded my morning routine."</p>
+                <span class="reviewer">- Sarah T.</span>
+            </div>
+            <div class="review-card">
+                <div class="stars">★★★★☆</div>
+                <p class="review-text">"Super clean flavor profile on the espresso shots. The atmosphere of their landing page is exactly how the shop feels."</p>
+                <span class="reviewer">- David K.</span>
+            </div>
+        </div>
+
+        <div class="form-container review-form-box">
+            <h2>Leave a Review</h2>
+            <form action="#">
+                <div class="form-group">
+                    <label for="reviewer-name">Your Name</label>
+                    <input type="text" id="reviewer-name" placeholder="Enter your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rating-select">Rating</label>
+                    <select id="rating-select">
+                        <option value="5">★★★★★ (Excellent)</option>
+                        <option value="4">★★★★☆ (Very Good)</option>
+                        <option value="3">★★★☆☆ (Average)</option>
+                        <option value="2">★★☆☆☆ (Poor)</option>
+                        <option value="1">★☆☆☆☆ (Terrible)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="review-msg">Your Experience</label>
+                    <textarea id="review-msg" rows="4" placeholder="How was your coffee experience..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Review</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

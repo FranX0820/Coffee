@@ -1,0 +1,216 @@
+/* --- Global Resets & Body Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url(background.avif); /* Keeps your beautiful high-res background uniform across pages */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    color: white;
+}
+
+/* --- Shared Navigation Header --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background: rgba(0, 0, 0, 0.4); /* Transparent glass tint to make nav bar distinct */
+}
+
+h1.logo {
+    color: white;
+    font-size: 28px;
+}
+
+nav.navbar a {
+    margin-left: 30px;    
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav.navbar a:hover {
+    color: #e6b89c; /* Cozy accent color */
+}
+
+/* --- Home / Hero Layout Section --- */
+.hero {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: calc(100vh - 80px);
+    padding: 0 10%;
+}
+
+.hero-content {
+    max-width: 500px;
+}
+
+.hero-content h2 {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-content h2 span {
+    color: #e6b89c;
+}
+
+.hero-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #d1cbc4;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.hero-buttons a {
+    text-decoration: none;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #e6b89c;
+    color: #1a0f0a;
+}
+
+.btn-primary:hover {
+    background-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: #ffffff;
+    color: #1a0f0a;
+    transform: translateY(-2px);
+}
+
+/* --- Menu & Order Dynamic Layouts --- */
+.page-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: #e6b89c;
+}
+
+/* Menu Custom Elements */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.menu-card {
+    background: rgba(26, 15, 10, 0.85); /* Semi-transparent coffee-dark glass */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.menu-card h3 {
+    color: #e6b89c;
+    margin-bottom: 10px;
+}
+
+.menu-card p {
+    font-size: 14px;
+    color: #d1cbc4;
+    margin-bottom: 15px;
+    height: 40px; /* Aligns layout neatly */
+}
+
+.menu-card .price {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Order Form Custom Elements */
+.form-container {
+    background: rgba(26, 15, 10, 0.9);
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.form-container h2 {
+    margin-bottom: 25px;
+    text-align: center;
+    color: #e6b89c;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #d1cbc4;
+}
+
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    font-size: 15px;
+}
+
+.form-group select option {
+    background: #1a0f0a; /* Fallback readable background colors inside dropdown */
+    color: white;
+}
+
+.submit-btn {
+    width: 100%;
+    background: #e6b89c;
+    color: #1a0f0a;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.submit-btn:hover {
+    background: #ffffff;
+}
