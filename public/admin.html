@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coffee - Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="logo">Coffee.</h1>
+      <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="order.html">Order</a>
+        <a href="review.html">Rate Us</a>
+        <a href="admin.html">Dashboard</a>
+      </nav>
+    </header>
+
+    <main class="page-container">
+      <h2 class="page-title">Incoming Live Orders</h2>
+
+      <div
+        class="form-container dashboard-box"
+        style="max-width: 90%; width: 1100px"
+      >
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Coffee Item</th>
+              <th>Size</th>
+              <th>Special Instructions</th>
+              <th>Total Price</th>
+              <th>Date & Time</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <tr id="loading-row">
+              <td colspan="7" style="text-align: center; color: #e6b89c">
+                Loading orders from database...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <script src="admin-script.js"></script>
+  </body>
+</html>

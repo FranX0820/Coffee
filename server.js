@@ -83,7 +83,25 @@ app.post('/api/reviews', async (req, res) => {
     }
 });
 
-// Route C: Pull down all reviews collection dataset to display back on ui grid
+// Route C: FETCH ALL ORDERS (PROTECTED DASHBOARD ROUTE)
+app.get('/api/orders', async (req, res) => {
+    // 1. Grab the security key sent by the frontend header
+    const adminKey = req.headers['x-admin-key'];
+
+    // 2. Verify if the key matches our secret passphrase
+    if (adminKey !== 'hehe') {
+        return res.status(403).json({ success: false, error: 'Access Denied: Invalid Admin Key' });
+    }
+
+    try {
+        const allOrders = await Order.find().sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: allOrders });
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'Failed to fetch orders' });
+    }
+});
+
+// Route D: Pull down all reviews collection dataset to display back on ui grid
 app.get('/api/reviews', async (req, res) => {
     try {
         const reviews = await Review.find().sort({ createdAt: -1 });
@@ -99,8 +117,24 @@ app.get('/api/reviews', async (req, res) => {
     }
 });
 
+// Route E: DELETE AN ORDER WHEN SERVED
+app.delete('/api/orders/:id', async (req, res) => {
+    try {
+        const deletedOrder = await Order.findByIdAndDelete(req.params.id);
+        
+        if (!deletedOrder) {
+            return res.status(404).json({ success: false, error: "Order not found" });
+        }
 
-// 7. Initialize listener loop pipeline
+        res.status(200).json({ success: true, message: "Order successfully removed from database" });
+    } catch (error) {
+        console.error("Database delete error:", error);
+        res.status(500).json({ success: false, error: "Failed to delete order" });
+    }
+});
+
+
+// 7. Initialize listener loop pipeline (ALWAYS STAYS AT THE VERY BOTTOM)
 const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`Server is running smoothly on port ${PORT}`);
