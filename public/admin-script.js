@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // 2. Send the password along inside the hidden network request headers
-        const response = await fetch('http://localhost:5000/api/orders', {
+        const response = await fetch('https://coffee-1qx.onrender.com/api/orders', {
             method: 'GET',
             headers: {
                 'x-admin-key': password // Shoves the input password into the request header channel
