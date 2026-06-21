@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Sending data to backend:", orderData);
 
             try {
-                const response = await fetch('https://coffee-1qx.onrender.com/api/orders', {
+                const response = await fetch('https://coffee-1zpr.onrender.com/api/orders',  {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(orderData)
