@@ -299,29 +299,29 @@ nav.navbar a:hover {
 
 /* MOBILE MEDIA QUERY (Applies to screens smaller than 768px) */
 @media (max-width: 768px) {
-    /* Show the hamburger button on mobile */
+    /* Show the hamburger icon */
     .hamburger {
         display: flex;
     }
 
-    /* Hide the navigation links off-screen by default on mobile */
+    /* 1. HIDE THE NAVIGATION LINKS BOX BY DEFAULT ON MOBILE */
     .nav-links {
+        display: none; /* Keeps it completely hidden until clicked */
         position: absolute;
-        top: 70px; /* Adjust based on your header's height */
-        right: -100%; /* Shoves it completely off the right side of the screen */
-        width: 200px;
-        background-color: #2b2521; /* Dark coffee background */
+        top: 60px; /* Adjust this to sit perfectly beneath your header line */
+        right: 20px;
+        width: 180px;
+        background-color: #2b2521; /* Dark theme block background */
         flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        padding: 30px;
-        border-radius: 8px 0 0 8px;
-        transition: right 0.3s ease; /* Smooth sliding animation */
-        box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.3);
+        gap: 15px;
+        padding: 20px;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        z-index: 99;
     }
 
-    /* This active class will slide the menu into view when clicked */
+    /* 2. SHOW THE BOX WHEN THE ACTIVE CLASS IS PRESENT */
     .nav-links.active {
-        right: 0;
+        display: flex; 
     }
 }
