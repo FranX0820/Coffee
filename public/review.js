@@ -62,3 +62,20 @@ document.getElementById("ratingForm").addEventListener("submit", async (e) => {
 
 // Run initialization code on page entry
 loadRatings();
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ==========================================
+    // HAMBURGER TOGGLE (MUST BE INSIDE HERE)
+    // ==========================================
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinksContainer = document.getElementById('nav-links-container');
+
+    if (hamburgerBtn && navLinksContainer) {
+        hamburgerBtn.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+        });
+    }
+
+    // ... your existing dashboard or review code lives down here ...
+
+});

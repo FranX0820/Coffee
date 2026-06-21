@@ -77,3 +77,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Failed to connect to the server.</td></tr>`;
     }
 });
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ==========================================
+    // HAMBURGER TOGGLE (MUST BE INSIDE HERE)
+    // ==========================================
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinksContainer = document.getElementById('nav-links-container');
+
+    if (hamburgerBtn && navLinksContainer) {
+        hamburgerBtn.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+        });
+    }
+
+    // ... your existing dashboard or review code lives down here ...
+
+});
