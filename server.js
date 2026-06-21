@@ -1,3 +1,4 @@
+
 // 1. Core Modules and Packages Imports
 const express = require('express');
 const mongoose = require('mongoose');
@@ -26,8 +27,8 @@ const transporter = nodemailer.createTransport({
 });
 
 // 5. Connect to Local MongoDB Setup
-mongoose.connect('mongodb://localhost:27017/coffeeShopDB')
-    .then(() => console.log('Successfully connected to MongoDB!'))
+mongoose.connect('mongodb+srv://mohuaduttajsr0820_db_user:Mohua@cluster0.ragpkby.mongodb.net/coffeeShopDB?retryWrites=true&w=majority&appName=Cluster0')
+    .then(() => console.log('Successfully connected to MongoDB Atlas Cloud!'))
     .catch(err => console.error('Database connection error:', err));
 
 
