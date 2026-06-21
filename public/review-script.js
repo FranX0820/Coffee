@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // 3. Ship it to the server backend route we already made
-                const response = await fetch('http://localhost:5000/api/reviews', {
+                const response = await fetch('https://coffee-1qx.onrender.com/api/reviews', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(reviewData)
