@@ -270,3 +270,58 @@ nav.navbar a:hover {
     color: #887e75;
     cursor: not-allowed;
 }
+/* ==========================================
+   HAMBURGER MENU STYLING
+   ========================================== */
+
+/* Hide the hamburger button by default on big desktop screens */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+}
+
+/* Style the 3 lines inside the hamburger button */
+.hamburger span {
+    width: 100%;
+    height: 3px;
+    background-color: #e6b89c; /* Matches your coffee theme color */
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* MOBILE MEDIA QUERY (Applies to screens smaller than 768px) */
+@media (max-width: 768px) {
+    /* Show the hamburger button on mobile */
+    .hamburger {
+        display: flex;
+    }
+
+    /* Hide the navigation links off-screen by default on mobile */
+    .nav-links {
+        position: absolute;
+        top: 70px; /* Adjust based on your header's height */
+        right: -100%; /* Shoves it completely off the right side of the screen */
+        width: 200px;
+        background-color: #2b2521; /* Dark coffee background */
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 30px;
+        border-radius: 8px 0 0 8px;
+        transition: right 0.3s ease; /* Smooth sliding animation */
+        box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* This active class will slide the menu into view when clicked */
+    .nav-links.active {
+        right: 0;
+    }
+}

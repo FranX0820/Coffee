@@ -75,3 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Your Live Review Submission code stays below this point...
 });
+// ==========================================
+// MOBILE HAMBURGER MENU INTERACTION LOGIC
+// ==========================================
+const hamburgerBtn = document.getElementById('hamburger-btn');
+const navLinksContainer = document.getElementById('nav-links-container');
+
+if (hamburgerBtn && navLinksContainer) {
+    hamburgerBtn.addEventListener('click', () => {
+        // Toggles the "active" class on and off every time you click it
+        navLinksContainer.classList.toggle('active');
+    });
+}
