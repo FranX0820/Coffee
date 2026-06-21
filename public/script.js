@@ -75,15 +75,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Your Live Review Submission code stays below this point...
 });
-// ==========================================
-// MOBILE HAMBURGER MENU INTERACTION LOGIC
-// ==========================================
-const hamburgerBtn = document.getElementById('hamburger-btn');
-const navLinksContainer = document.getElementById('nav-links-container');
+document.addEventListener('DOMContentLoaded', () => {
 
-if (hamburgerBtn && navLinksContainer) {
-    hamburgerBtn.addEventListener('click', () => {
-        // Toggles the "active" class on and off every time you click it
-        navLinksContainer.classList.toggle('active');
-    });
-}
+    // ... your order form calculator code lives up here ...
+
+    // ==========================================
+    // MOBILE HAMBURGER MENU INTERACTION LOGIC
+    // ==========================================
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinksContainer = document.getElementById('nav-links-container');
+
+    if (hamburgerBtn && navLinksContainer) {
+        hamburgerBtn.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+            console.log("Hamburger clicked! Active class toggled."); // Adding a test log
+        });
+    }
+
+}); // <--- Make sure it is inside this closing bracket!
