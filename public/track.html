@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coffee - Track Order</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Tracker Progress Timeline Layout Box styles */
+      .tracker-container {
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 30px;
+        background: rgba(43, 37, 33, 0.85);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+      .timeline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        margin: 40px 0;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        background: #4a3f35;
+        height: 4px;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+      }
+      .progress-line {
+        position: absolute;
+        background: #e6b89c;
+        height: 4px;
+        width: 0%;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        transition: width 0.5s ease;
+      }
+      .step {
+        width: 40px;
+        height: 40px;
+        background: #2b2521;
+        border: 4px solid #4a3f35;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        transition: all 0.4s ease;
+        font-weight: bold;
+        color: #a89f91;
+      }
+      .step.active {
+        border-color: #e6b89c;
+        background: #e6b89c;
+        color: #2c1a11;
+        box-shadow: 0 0 15px rgba(230, 184, 156, 0.6);
+      }
+      .step-labels {
+        display: flex;
+        justify-content: space-between;
+        color: #e6b89c;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="logo">Coffee.</h1>
+    </header>
+
+    <main class="page-container">
+      <div class="tracker-container">
+        <h2 style="color: #fff">Tracking Your Coffee</h2>
+        <p
+          id="track-id-display"
+          style="font-family: monospace; color: #a89f91; margin-top: 5px"
+        ></p>
+
+        <div class="timeline">
+          <div class="progress-line" id="progress-line"></div>
+          <div class="step active" id="step-1">1</div>
+          <div class="step" id="step-2">2</div>
+        </div>
+
+        <div class="step-labels">
+          <span>Order Received</span>
+          <span>Ready for Pickup!</span>
+        </div>
+
+        <p
+          id="status-message"
+          style="margin-top: 30px; font-style: italic; color: #e6b89c"
+        >
+          Checking order details...
+        </p>
+      </div>
+    </main>
+  </body>
+</html>

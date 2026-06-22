@@ -1,4 +1,3 @@
-
 // 1. Core Modules and Packages Imports
 const express = require('express');
 const mongoose = require('mongoose');
@@ -88,19 +87,18 @@ app.post('/api/reviews', async (req, res) => {
     }
 });
 
-// Route C: FETCH ALL ORDERS (PROTECTED DASHBOARD ROUTE)
+// ✅ Route C (UPDATED): FETCH PENDING ORDERS ONLY FOR DASHBOARD
 app.get('/api/orders', async (req, res) => {
-    // 1. Grab the security key sent by the frontend header
     const adminKey = req.headers['x-admin-key'];
 
-    // 2. Verify if the key matches our secret passphrase
     if (adminKey !== 'hehe') {
         return res.status(403).json({ success: false, error: 'Access Denied: Invalid Admin Key' });
     }
 
     try {
-        const allOrders = await Order.find().sort({ createdAt: -1 });
-        res.status(200).json({ success: true, data: allOrders });
+        // Only return orders where status is 'pending' so served orders hide away dynamically
+        const incomingOrders = await Order.find({ status: 'pending' }).sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: incomingOrders });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to fetch orders' });
     }
@@ -122,19 +120,24 @@ app.get('/api/reviews', async (req, res) => {
     }
 });
 
-// Route E: DELETE AN ORDER WHEN SERVED
-app.delete('/api/orders/:id', async (req, res) => {
+// ✅ Route E (UPDATED): SWITCHED FROM DELETE TO PUT TO MARK AS COMPLETED
+app.put('/api/orders/:id/serve', async (req, res) => {
     try {
-        const deletedOrder = await Order.findByIdAndDelete(req.params.id);
+        // Find order by ID parameter and flip its status flag string field properties to 'completed'
+        const updatedOrder = await Order.findByIdAndUpdate(
+            req.params.id,
+            { status: 'completed' },
+            { new: true }
+        );
         
-        if (!deletedOrder) {
+        if (!updatedOrder) {
             return res.status(404).json({ success: false, error: "Order not found" });
         }
 
-        res.status(200).json({ success: true, message: "Order successfully removed from database" });
+        res.status(200).json({ success: true, message: "Order status marked as completed!", data: updatedOrder });
     } catch (error) {
-        console.error("Database delete error:", error);
-        res.status(500).json({ success: false, error: "Failed to delete order" });
+        console.error("Database status update error:", error);
+        res.status(500).json({ success: false, error: "Failed to update order status" });
     }
 });
 
