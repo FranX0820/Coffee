@@ -64,11 +64,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           serveButton.disabled = true;
 
           try {
-            // ✅ FIXED: Updated from localhost to your live production Render domain
+            
             const deleteResponse = await fetch(
-              `https://coffee-1zpr.onrender.com/api/orders/${order._id}`,
+              `https://coffee-1zpr.onrender.com/api/orders/${order._id}/serve`,
               {
-                method: "DELETE",
+                method: "PUT",
               },
             );
             const deleteResult = await deleteResponse.json();
