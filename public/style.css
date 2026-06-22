@@ -298,28 +298,46 @@ nav.navbar a:hover {
 }
 
 /* MOBILE MEDIA QUERY (Applies to screens smaller than 768px) */
-@media (max-width: 768px) {
-    /* ✅ ADD OR UPDATE THIS BLOCK INSIDE YOUR MOBILE QUERY: */
+@media (max-width: 769px) {
+    /* 1. Force the header wrapper to allow spacing on mobile */
     .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        display: flex ;
+        justify-content: space-between ;
+        align-items: center ;
+        padding: 15px 20px ;
         width: 100%;
-        padding: 15px 20px;
-        position: relative; /* Gives your dropdown menu a clean base point to align below */
+        box-sizing: border-box;
     }
 
-    /* Make sure your navbar element plays along nicely */
-    .navbar {
-        display: flex;
-        align-items: center;
+    /* 2. Style the button container box */
+    .hamburger {
+        display: flex; /* Forces it to show up */
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 101; /* Keeps it layered on top */
     }
 
-    /* Adjust your dropdown menu positioning slightly to look perfect */
+    /* 3. STYLE THE THREE INDIVIDUAL LINES (SPAN TAGS) */
+    .hamburger span {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: #e6b89c; /* Gives the bars your brand's tan/beige color */
+        border-radius: 2px;
+        transition: all 0.3s ease; /* Makes any animation smooth */
+    }
+    
+    /* Keep your existing menu background rules below... */
     .nav-links {
         display: none;
         position: absolute;
-        top: 100%; /* Sits cleanly right under the header bar */
+        top: 60px;
         right: 20px;
         width: 180px;
         background-color: #2b2521;
@@ -327,11 +345,9 @@ nav.navbar a:hover {
         gap: 15px;
         padding: 20px;
         border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         z-index: 99;
     }
-
     .nav-links.active {
-        display: flex;
+        display: flex ;
     }
 }
