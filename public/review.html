@@ -10,11 +10,21 @@
     <header class="header">
       <h1 class="logo">Coffee.</h1>
       <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="menu.html">Menu</a>
-        <a href="order.html">Order</a>
-        <a href="review.html">Rate Us</a>
-        <a href="admin.html">Dashboard</a>
+        <a href="index.html" class="logo"></a>
+
+        <button class="hamburger" id="hamburger-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="nav-links" id="nav-links-container">
+          <a href="index.html">Home</a>
+          <a href="menu.html">Menu</a>
+          <a href="order.html">Order</a>
+          <a href="review.html">Rate Us</a>
+          <a href="admin.html">Dashboard</a>
+        </div>
       </nav>
     </header>
 
@@ -65,7 +75,6 @@
               required
             />
           </div>
-          
 
           <div class="form-group">
             <label for="reviewer-email">Your Email Address</label>
