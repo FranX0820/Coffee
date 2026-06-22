@@ -299,19 +299,30 @@ nav.navbar a:hover {
 
 /* MOBILE MEDIA QUERY (Applies to screens smaller than 768px) */
 @media (max-width: 768px) {
-    /* Show the hamburger icon */
-    .hamburger {
+    /* ✅ ADD OR UPDATE THIS BLOCK INSIDE YOUR MOBILE QUERY: */
+    .header {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 15px 20px;
+        position: relative; /* Gives your dropdown menu a clean base point to align below */
     }
 
-    /* 1. HIDE THE NAVIGATION LINKS BOX BY DEFAULT ON MOBILE */
+    /* Make sure your navbar element plays along nicely */
+    .navbar {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Adjust your dropdown menu positioning slightly to look perfect */
     .nav-links {
-        display: none; /* Keeps it completely hidden until clicked */
+        display: none;
         position: absolute;
-        top: 60px; /* Adjust this to sit perfectly beneath your header line */
+        top: 100%; /* Sits cleanly right under the header bar */
         right: 20px;
         width: 180px;
-        background-color: #2b2521; /* Dark theme block background */
+        background-color: #2b2521;
         flex-direction: column;
         gap: 15px;
         padding: 20px;
@@ -320,46 +331,7 @@ nav.navbar a:hover {
         z-index: 99;
     }
 
-    /* 2. SHOW THE BOX WHEN THE ACTIVE CLASS IS PRESENT */
     .nav-links.active {
-        display: flex; 
-    }
-}
-/* ==========================================
-   RESPONSIVE TABLES FOR MOBILE INTERFACES
-   ========================================== */
-.table-responsive-container {
-    width: 100%;
-    overflow-x: auto; /* Adds a horizontal scrollbar ONLY when content overflows */
-    -webkit-overflow-scrolling: touch; /* Makes scrolling smooth and bouncy on iPhones */
-    margin-top: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Optional: Make the Order ID text slightly smaller so it takes up less room */
-table td:first-child {
-    font-size: 11px;
-    font-family: monospace;
-    color: #a89382;
-}
-@media (max-width: 768px) {
-    
-    /* 1. ADD THIS PART INSIDE THE MEDIA QUERY BLOCK: */
-    header, nav.navbar {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        padding: 10px 20px;
-    }
-
-    /* Keep whatever hamburger styles you already have below it... */
-    .hamburger {
-        display: flex;
-    }
-    .nav-links {
-        display: none;
-        /* ... etc ... */
     }
 }
