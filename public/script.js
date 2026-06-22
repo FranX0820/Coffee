@@ -1,107 +1,92 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // ==========================================
-    // 1. DYNAMIC ORDER PRICE CALCULATOR & CLICK SUBMIT
-    // ==========================================
-    const coffeeSelect = document.getElementById('coffee-type');
-    const sizeSelect = document.getElementById('size');
-    const formContainer = document.querySelector('.form-container form');
-    const orderBtn = document.getElementById('order-click-btn'); // 1. Target the button directly!
+document.addEventListener("DOMContentLoaded", () => {
+  // ==========================================
+  // 1. DYNAMIC ORDER PRICE CALCULATOR & SUBMIT
+  // ==========================================
+  const coffeeSelect = document.getElementById("coffee-type");
+  const sizeSelect = document.getElementById("size");
+  const formContainer = document.querySelector(".form-container form");
+  const orderBtn = document.getElementById("order-click-btn");
 
-    // Check if everything exists on the page
-    if (coffeeSelect && sizeSelect && formContainer && orderBtn) {
-        
-        // Create and inject a price display element into the form
-        const priceDisplay = document.createElement('div');
-        priceDisplay.className = 'price-display';
-        priceDisplay.style.cssText = 'font-size: 20px; font-weight: bold; color: #e6b89c; margin: 20px 0; text-align: center;';
-        
-        // Insert it right before the button
-        formContainer.insertBefore(priceDisplay, orderBtn);
+  if (coffeeSelect && sizeSelect && formContainer && orderBtn) {
+    // Create and inject a price display element into the form
+    const priceDisplay = document.createElement("div");
+    priceDisplay.className = "price-display";
+    priceDisplay.style.cssText =
+      "font-size: 20px; font-weight: bold; color: #e6b89c; margin: 20px 0; text-align: center;";
 
-        function calculateTotal() {
-            const selectedCoffee = coffeeSelect.options[coffeeSelect.selectedIndex];
-            const basePrice = parseFloat(selectedCoffee.getAttribute('data-price'));
-            
-            const selectedSize = sizeSelect.options[sizeSelect.selectedIndex];
-            const sizeExtra = parseFloat(selectedSize.getAttribute('data-extra'));
-            
-            const total = basePrice + sizeExtra;
-            priceDisplay.innerHTML = `Total Amount: $${total.toFixed(2)}`;
-        }
+    formContainer.insertBefore(priceDisplay, orderBtn);
 
-        coffeeSelect.addEventListener('change', calculateTotal);
-        sizeSelect.addEventListener('change', calculateTotal);
-        
-        calculateTotal(); // Run once to set initial price
+    function calculateTotal() {
+      const selectedCoffee = coffeeSelect.options[coffeeSelect.selectedIndex];
+      const basePrice = parseFloat(selectedCoffee.getAttribute("data-price"));
 
-        // 2. CHANGED THIS FROM 'submit' ON FORM TO 'click' ON THE BUTTON
-        orderBtn.addEventListener('click', async () => {
-            console.log("Button clicked! Gathering order details...");
+      const selectedSize = sizeSelect.options[sizeSelect.selectedIndex];
+      const sizeExtra = parseFloat(selectedSize.getAttribute("data-extra"));
 
-            const orderData = {
-                coffeeType: coffeeSelect.value,
-                size: sizeSelect.value,
-                notes: document.getElementById('notes').value,
-                totalPrice: parseFloat(priceDisplay.innerText.replace('Total Amount: $', ''))
-            };
-
-            console.log("Sending data to backend:", orderData);
-
-            try {
-                const response = await fetch('https://coffee-1zpr.onrender.com/api/orders',  {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
-                });
-
-                const result = await response.json();
-                console.log("Server response:", result);
-
-                if (result.success) {
-                    alert('Order placed successfully! Saved to database.');
-                    formContainer.reset();
-                    calculateTotal(); // Reset pricing text back to base
-                } else {
-                    alert('Server error: ' + result.error);
-                }
-            } catch (error) {
-                console.error('Error sending order to server:', error);
-                alert('Could not connect to the server. Make sure node server.js is running!');
-            }
-        });
-
-    } // <--- Closes form validation block
-
-    // Your Live Review Submission code stays below this point...
-});
-document.addEventListener('DOMContentLoaded', () => {
-
-    // ... your order form calculator code lives up here ...
-
-    // ==========================================
-    // MOBILE HAMBURGER MENU INTERACTION LOGIC
-    // ==========================================
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navLinksContainer = document.getElementById('nav-links-container');
-
-    if (hamburgerBtn && navLinksContainer) {
-        hamburgerBtn.addEventListener('click', () => {
-            navLinksContainer.classList.toggle('active');
-            console.log("Hamburger clicked! Active class toggled."); // Adding a test log
-        });
+      const total = basePrice + sizeExtra;
+      priceDisplay.innerHTML = `Total Amount: $${total.toFixed(2)}`;
     }
 
-}); // <--- Make sure it is inside this closing bracket!
-// Inside your order form submission handler block after getting database response:
-const result = await response.json();
+    coffeeSelect.addEventListener("change", calculateTotal);
+    sizeSelect.addEventListener("change", calculateTotal);
 
-if (result.success) {
-    // Grab the actual MongoDB _id generated by the backend
-    const orderId = result.data._id;
-    
-    // Redirect the user straight to the live status tracker screen!
-    window.location.href = `track.html?id=${orderId}`;
-} else {
-    alert("Failed to submit order.");
-}
+    calculateTotal(); // Run once to set initial price
+
+    // Click event listener to handle order creation
+    orderBtn.addEventListener("click", async (e) => {
+      e.preventDefault(); // Stop page flashing/reloading
+      console.log("Button clicked! Gathering order details...");
+
+      const orderData = {
+        coffeeType: coffeeSelect.value,
+        size: sizeSelect.value,
+        notes: document.getElementById("notes").value,
+        totalPrice: parseFloat(
+          priceDisplay.innerText.replace("Total Amount: $", ""),
+        ),
+      };
+
+      console.log("Sending data to backend:", orderData);
+
+      try {
+        const response = await fetch(
+          "https://coffee-1zpr.onrender.com/api/orders",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+          },
+        );
+
+        const result = await response.json();
+        console.log("Server response:", result);
+
+        if (result.success) {
+          // ✅ FIXED: Grab the generated ID and redirect instantly to tracker page
+          const orderId = result.data._id;
+          window.location.href = `track.html?id=${orderId}`;
+        } else {
+          alert("Server error: " + result.error);
+        }
+      } catch (error) {
+        console.error("Error sending order to server:", error);
+        alert(
+          "Could not connect to the server. Make sure node server.js is running!",
+        );
+      }
+    });
+  }
+
+  // ==========================================
+  // 2. MOBILE HAMBURGER MENU INTERACTION LOGIC
+  // ==========================================
+  const hamburgerBtn = document.getElementById("hamburger-btn");
+  const navLinksContainer = document.getElementById("nav-links-container");
+
+  if (hamburgerBtn && navLinksContainer) {
+    hamburgerBtn.addEventListener("click", () => {
+      navLinksContainer.classList.toggle("active");
+      console.log("Hamburger clicked! Active class toggled.");
+    });
+  }
+});
