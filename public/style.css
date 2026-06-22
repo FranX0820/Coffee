@@ -325,3 +325,41 @@ nav.navbar a:hover {
         display: flex; 
     }
 }
+/* ==========================================
+   RESPONSIVE TABLES FOR MOBILE INTERFACES
+   ========================================== */
+.table-responsive-container {
+    width: 100%;
+    overflow-x: auto; /* Adds a horizontal scrollbar ONLY when content overflows */
+    -webkit-overflow-scrolling: touch; /* Makes scrolling smooth and bouncy on iPhones */
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: Make the Order ID text slightly smaller so it takes up less room */
+table td:first-child {
+    font-size: 11px;
+    font-family: monospace;
+    color: #a89382;
+}
+@media (max-width: 768px) {
+    
+    /* 1. ADD THIS PART INSIDE THE MEDIA QUERY BLOCK: */
+    header, nav.navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 10px 20px;
+    }
+
+    /* Keep whatever hamburger styles you already have below it... */
+    .hamburger {
+        display: flex;
+    }
+    .nav-links {
+        display: none;
+        /* ... etc ... */
+    }
+}
