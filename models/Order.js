@@ -6,12 +6,12 @@ const orderSchema = new mongoose.Schema(
     size: { type: String, required: true },
     notes: { type: String, default: "" },
     totalPrice: { type: Number, required: true },
-    // ✅ Make absolutely sure this block is written exactly like this:
     status: {
       type: String,
       default: "pending",
       enum: ["pending", "completed"],
     },
+    email: { type: String, required: true }
   },
   { timestamps: true },
 );

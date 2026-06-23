@@ -37,9 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault(); // Stop page flashing/reloading
       console.log("Button clicked! Gathering order details...");
 
+      // Inside your public/script.js orderBtn event listener:
       const orderData = {
         coffeeType: coffeeSelect.value,
         size: sizeSelect.value,
+        // ✅ Add this line to target your new email field string
+        email: document.getElementById("user-email").value,
         notes: document.getElementById("notes").value,
         totalPrice: parseFloat(
           priceDisplay.innerText.replace("Total Amount: $", ""),
