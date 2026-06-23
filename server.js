@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // 4. Nodemailer Transport Configuration (FORCED TO IPv4)
 // 4. Nodemailer Transport Configuration (SECURED)
 // 4. Nodemailer Transport Configuration (FORCED TO IPV4 DIRECT)
-c// 4. Nodemailer Transport Configuration (ALTERNATIVE SUBMISSION PORT)
+// 4. Nodemailer Transport Configuration (ALTERNATIVE SUBMISSION PORT)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com", // Switch back to domain now that we are off port 465
   port: 2525,             // 👈 Alternative port that bypasses cloud provider firewalls
