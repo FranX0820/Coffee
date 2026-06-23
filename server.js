@@ -27,16 +27,12 @@ app.use(express.static(path.join(__dirname, "public")));
 // 4. Nodemailer Transport Configuration (SECURED)
 // 4. Nodemailer Transport Configuration (FORCED TO IPV4 DIRECT)
 // 4. Nodemailer Transport Configuration (ALTERNATIVE SUBMISSION PORT)
+// 4. Nodemailer Transport Configuration (AUTO SERVICE TRACK)
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com", // Switch back to domain now that we are off port 465
-  port: 2525,             // 👈 Alternative port that bypasses cloud provider firewalls
-  secure: false,          // Port 2525 starts unencrypted but upgrades securely via TLS
+  service: 'gmail', // 👈 Lets Nodemailer handle the ports and IPs automatically
   auth: {
     user: "mohuaduttajsr0820@gmail.com",
-    pass: process.env.GMAIL_PASS 
-  },
-  tls: {
-    rejectUnauthorized: false // Prevents internal connection handshakes from timing out
+    pass: process.env.GMAIL_PASS // Pulls from your Render Environment tab
   }
 });
 
