@@ -23,14 +23,23 @@ app.use(
 app.use(express.static(path.join(__dirname, "public")));
 
 // 4. Nodemailer Transport Configuration
+// 4. Nodemailer Transport Configuration (FORCED TO IPv4)
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // Use SSL
   auth: {
     user: "mohuaduttajsr0820@gmail.com",
     pass: "rcnl gygs rxtu puzt",
   },
+  // 📍 THIS FORCES NODEMAILER TO USE IPv4 INSTEAD OF CRASHING ON IPv6
+  connectionTimeout: 10000, 
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
+  dns: {
+    family: 4 // 👈 Forces IPv4 resolution exclusively
+  }
 });
-
 // 5. Connect to Local MongoDB Setup
 mongoose
   .connect(
