@@ -42,7 +42,6 @@ mongoose
 // --- 6. ENDPOINT API ROUTES ---
 
 // Route A: Listen for incoming orders from frontend form
-a; // Route A: Listen for incoming orders from frontend form
 app.post("/api/orders", async (req, res) => {
   try {
     const orderData = { ...req.body, status: "pending" };
@@ -117,7 +116,7 @@ app.post("/api/reviews", async (req, res) => {
   }
 });
 
-// ✅ Route C (UPDATED): FETCH PENDING ORDERS ONLY FOR DASHBOARD
+// Route C: FETCH PENDING ORDERS ONLY FOR DASHBOARD
 app.get("/api/orders", async (req, res) => {
   const adminKey = req.headers["x-admin-key"];
 
@@ -154,7 +153,6 @@ app.get("/api/reviews", async (req, res) => {
   }
 });
 
-// ✅ Route E (UPDATED): SWITCHED FROM DELETE TO PUT TO MARK AS COMPLETED
 // Route E: Update order status to completed and notify user
 app.put("/api/orders/:id/serve", async (req, res) => {
   try {
@@ -187,13 +185,11 @@ app.put("/api/orders/:id/serve", async (req, res) => {
       if (err) console.error("Order Served Email Failure:", err);
     });
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Order status marked as completed!",
-        data: updatedOrder,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Order status marked as completed!",
+      data: updatedOrder,
+    });
   } catch (error) {
     res
       .status(500)
