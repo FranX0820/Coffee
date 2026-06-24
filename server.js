@@ -101,15 +101,7 @@ app.post("/api/reviews", async (req, res) => {
     };
 
     // Fire off execution to send out email asynchronously
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Email notification failure:", error);
-      } else {
-        console.log(
-          "Automated validation email sent successfully: " + info.response,
-        );
-      }
-    });
+    await transporter.sendMail(mailOptions);
 
     res
       .status(201)
