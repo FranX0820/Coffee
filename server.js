@@ -88,7 +88,7 @@ app.post("/api/reviews", async (req, res) => {
     // Setup the specific email layout rules
     const mailOptions = {
       from: "mohuaduttajsr0820@gmail.com",
-      to: email,
+      to: "mohuaduttajsr0820@gmail.com",
       subject: "Thank you for your review! ☕",
       html: `
                 <h3>Hi ${name},</h3>
