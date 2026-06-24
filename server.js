@@ -22,19 +22,16 @@ app.use(
 );
 app.use(express.static(path.join(__dirname, "public")));
 
-// 4. Nodemailer Transport Configuration
-// 4. Nodemailer Transport Configuration (FORCED TO IPv4)
-// 4. Nodemailer Transport Configuration (SECURED)
-// 4. Nodemailer Transport Configuration (FORCED TO IPV4 DIRECT)
-// 4. Nodemailer Transport Configuration (ALTERNATIVE SUBMISSION PORT)
-// 4. Nodemailer Transport Configuration (AUTO SERVICE TRACK)
-const transporter = nodemailer.createTransport({
-  service: 'gmail', // 👈 Lets Nodemailer handle the ports and IPs automatically
-  auth: {
-    user: "mohuaduttajsr0820@gmail.com",
-    pass: process.env.GMAIL_PASS // Pulls from your Render Environment tab
-  }
-});
+// 4. Nodemailer SendGrid API Configuration (Bypasses Firewall Ports)
+const sgTransport = require("nodemailer-sendgrid-transport");
+
+const transporter = nodemailer.createTransport(
+  sgTransport({
+    auth: {
+      api_key: process.env.SENDGRID_API_KEY, // 👈 Securely pulled from Render environment variables
+    },
+  }),
+);
 
 // 5. Connect to Local MongoDB Setup
 // 5. Connect to Local MongoDB Setup
