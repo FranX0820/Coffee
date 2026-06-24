@@ -86,27 +86,41 @@ app.post("/api/reviews", async (req, res) => {
     await newReview.save();
 
     // Setup the specific email layout rules
+    // Route B: Submit a new review & trigger automated thank you email dispatch
+app.post("/api/reviews", async (req, res) => {
+  try {
+    const { name, email, rating, comment } = req.body;
+
+    // Save form submission record straight to MongoDB
+    const newReview = new Review({ name, email, rating, comment });
+    await newReview.save();
+
+    // Setup the specific email layout rules
     const mailOptions = {
       from: "mohuaduttajsr0820@gmail.com",
-      to: "mohuaduttajsr0820@gmail.com",
-      subject: "Thank you for your review! ☕",
+      to: "mohuaduttajsr0820@gmail.com", // Sends a notification directly to you
+      subject: `New ${rating}-Star Review from ${name}! ☕`,
       html: `
-                <h3>Hi ${name},</h3>
-                <p>Thank you so much for taking the time to share your experience with Coffee.!</p>
-                <p>We are thrilled that you gave us a <strong>${rating}/5 star</strong> rating. Your feedback helps our team keep roasting the best coffee beans around.</p>
-                <br>
-                <p>Warm regards,</p>
-                <p><strong>The Coffee. Team</strong></p>
-            `,
+        <h3>New Website Review Received</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Rating:</strong> ${rating} / 5 Stars</p>
+        <p><strong>Comment:</strong> ${comment}</p>
+        <br>
+        <p>Warm regards,</p>
+        <p><strong>The Coffee Team</strong></p>
+      `
     };
 
     // Fire off execution to send out email asynchronously
     await transporter.sendMail(mailOptions);
 
-    res
-      .status(201)
-      .json({ success: true, message: "Review saved and email sent!" });
+    // Return successful response to frontend script
+    res.status(201).json({ success: true, message: "Review saved and email sent!" });
+
   } catch (error) {
+    // This logs the exact error details into your Render dashboard logs panel
+    console.error("🔴 CRITICAL REVIEW ROUTE ERROR:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
