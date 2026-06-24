@@ -86,19 +86,9 @@ app.post("/api/reviews", async (req, res) => {
     await newReview.save();
 
     // Setup the specific email layout rules
-    // Route B: Submit a new review & trigger automated thank you email dispatch
-app.post("/api/reviews", async (req, res) => {
-  try {
-    const { name, email, rating, comment } = req.body;
-
-    // Save form submission record straight to MongoDB
-    const newReview = new Review({ name, email, rating, comment });
-    await newReview.save();
-
-    // Setup the specific email layout rules
     const mailOptions = {
       from: "mohuaduttajsr0820@gmail.com",
-      to: "mohuaduttajsr0820@gmail.com", // Sends a notification directly to you
+      to: "mohuaduttajsr0820@gmail.com", // Sends notification to you
       subject: `New ${rating}-Star Review from ${name}! ☕`,
       html: `
         <h3>New Website Review Received</h3>
@@ -115,11 +105,9 @@ app.post("/api/reviews", async (req, res) => {
     // Fire off execution to send out email asynchronously
     await transporter.sendMail(mailOptions);
 
-    // Return successful response to frontend script
     res.status(201).json({ success: true, message: "Review saved and email sent!" });
 
   } catch (error) {
-    // This logs the exact error details into your Render dashboard logs panel
     console.error("🔴 CRITICAL REVIEW ROUTE ERROR:", error);
     res.status(500).json({ success: false, error: error.message });
   }
