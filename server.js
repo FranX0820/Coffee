@@ -83,7 +83,7 @@ app.post("/api/reviews", async (req, res) => {
 
     // Save form submission record straight to MongoDB
     const newReview = new Review({ name, email, rating, comment });
-    await newReview.save();
+    const savedReview = await newReview.save();
 
     // Setup the specific email layout rules
     const mailOptions = {
@@ -99,14 +99,17 @@ app.post("/api/reviews", async (req, res) => {
         <br>
         <p>Warm regards,</p>
         <p><strong>The Coffee Team</strong></p>
-      `
+      `,
     };
 
-    // Fire off execution to send out email asynchronously
-    await transporter.sendMail(mailOptions);
+    // Fire off execution via traditional callback path (Matches Order Route Success)
+    transporter.sendMail(mailOptions, (err) => {
+      if (err) console.error("🔴 Review Email Failure:", err);
+    });
 
-    res.status(201).json({ success: true, message: "Review saved and email sent!" });
-
+    res
+      .status(201)
+      .json({ success: true, message: "Review saved and email sent!" });
   } catch (error) {
     console.error("🔴 CRITICAL REVIEW ROUTE ERROR:", error);
     res.status(500).json({ success: false, error: error.message });
