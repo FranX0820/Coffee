@@ -88,8 +88,8 @@ app.post("/api/reviews", async (req, res) => {
     // Setup the specific email layout rules
     const mailOptions = {
       from: "mohuaduttajsr0820@gmail.com",
-      to: "mohuaduttajsr0820@gmail.com", // Sends notification to you
-      subject: `New ${rating}-Star Review from ${name}! ☕`,
+      to: "mohuaduttajsr0820@gmail.com", // Notification to you
+      subject: `[Review Alert] New ${rating}-Star Rating from ${name} ☕`,
       html: `
         <h3>New Website Review Received</h3>
         <p><strong>Name:</strong> ${name}</p>
@@ -102,17 +102,22 @@ app.post("/api/reviews", async (req, res) => {
       `,
     };
 
-    // Fire off execution via traditional callback path (Matches Order Route Success)
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) console.error("🔴 Review Email Failure:", err);
-    });
+    // FORCE the server to wait until SendGrid accepts the email before responding
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log("✅ Review email accepted by SendGrid queue safely.");
+    } catch (mailError) {
+      console.error("🔴 SendGrid internal connection drop:", mailError);
+      // We don't crash the whole request if only the email fails
+    }
 
-    res
+    // Now send the success token back to your browser
+    return res
       .status(201)
       .json({ success: true, message: "Review saved and email sent!" });
   } catch (error) {
     console.error("🔴 CRITICAL REVIEW ROUTE ERROR:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({ success: false, error: error.message });
   }
 });
 
