@@ -170,21 +170,21 @@ app.put("/api/orders/:id/serve", async (req, res) => {
     if (!updatedOrder) {
       return res.status(404).json({ success: false, error: "Order not found" });
     }
-
-    // ☕ EMAIL DISPATCH 2: ORDER READY FOR PICKUP
+    // Setup the specific email layout rules
     const mailOptions = {
       from: "mohuaduttajsr0820@gmail.com",
-      to: String(updatedOrder.email).trim(),
-      subject: "Your Fresh Brew is Ready for Pickup! 🎉☕",
+      to: String(email).trim(), // 👈 CHANGE THIS: Send it to the customer who left the review!
+      subject: `Thank you for your review, ${name}! ☕`,
       html: `
-                <h3>Your Coffee is Ready!</h3>
-                <p>Your <strong>${updatedOrder.coffeeType.toUpperCase()}</strong> has finished roasting and is sitting fresh at the pickup counter!</p>
-                <p>Head over and grab it while it's perfectly piping hot.</p>
-                <br>
-                <p>See you at the counter,<br><strong>The Coffee. Team</strong></p>
-            `,
+        <h3>We appreciate your feedback!</h3>
+        <p>Hi ${name},</p>
+        <p>Thank you for giving us a <strong>${rating} / 5 Star</strong> rating.</p>
+        <p>Your comments help our baristas keep brewing the best coffee around: "${comment}"</p>
+        <br>
+        <p>Warm regards,</p>
+        <p><strong>The Coffee Team</strong></p>
+      `,
     };
-
     // Fire the email asynchronously
     transporter.sendMail(mailOptions, (err) => {
       if (err) console.error("Order Served Email Failure:", err);
