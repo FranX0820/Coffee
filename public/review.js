@@ -1,8 +1,9 @@
-// review.js
+const BACKEND_URL = "https://coffee-1zpr.onrender.com";
 
 async function loadRatings() {
   try {
-    const response = await fetch("/api/reviews");
+    // ✅ Updated to absolute live path
+    const response = await fetch(`${BACKEND_URL}/api/reviews`);
     const data = await response.json();
 
     // Update aggregate stats
@@ -43,7 +44,8 @@ document.getElementById("ratingForm").addEventListener("submit", async (e) => {
   const comment = document.getElementById("review-msg").value;
 
   try {
-    const response = await fetch("/api/reviews", {
+    // ✅ Updated to absolute live path
+    const response = await fetch(`${BACKEND_URL}/api/reviews`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, rating: Number(rating), comment }),
@@ -62,20 +64,18 @@ document.getElementById("ratingForm").addEventListener("submit", async (e) => {
 
 // Run initialization code on page entry
 loadRatings();
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
+  // ==========================================
+  // HAMBURGER TOGGLE (MUST BE INSIDE HERE)
+  // ==========================================
+  const hamburgerBtn = document.getElementById("hamburger-btn");
+  const navLinksContainer = document.getElementById("nav-links-container");
 
-    // ==========================================
-    // HAMBURGER TOGGLE (MUST BE INSIDE HERE)
-    // ==========================================
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navLinksContainer = document.getElementById('nav-links-container');
+  if (hamburgerBtn && navLinksContainer) {
+    hamburgerBtn.addEventListener("click", () => {
+      navLinksContainer.classList.toggle("active");
+    });
+  }
 
-    if (hamburgerBtn && navLinksContainer) {
-        hamburgerBtn.addEventListener('click', () => {
-            navLinksContainer.classList.toggle('active');
-        });
-    }
-
-    // ... your existing dashboard or review code lives down here ...
-
+  // ... your existing dashboard or review code lives down here ...
 });
