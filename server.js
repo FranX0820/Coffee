@@ -186,8 +186,15 @@ app.put("/api/orders/:id/serve", async (req, res) => {
       `,
     };
     // Fire the email asynchronously
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) console.error("Order Served Email Failure:", err);
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.error("🔴 REVIEW EMAIL FAILURE:", err);
+      } else {
+        console.log(
+          "✅ Review email successfully sent via SendGrid:",
+          info.response,
+        );
+      }
     });
 
     res.status(200).json({
