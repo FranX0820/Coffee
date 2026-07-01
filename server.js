@@ -214,3 +214,24 @@ const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running smoothly on port ${PORT}`);
 });
+// ✅ LOYALTY STAMP ROUTE: Counts completed orders for an email
+app.get("/api/loyalty/:email", async (fileRequest, fileResponse) => {
+  try {
+    const customerEmail = fileRequest.params.email.trim();
+    
+    // Count how many orders under this email are marked as completed/served
+    // Note: Change "Served" to match your exact database status string if different
+    const completedCount = await Order.countDocuments({ 
+      email: customerEmail, 
+      status: "Served" 
+    });
+
+    fileResponse.json({ 
+      success: true, 
+      stamps: completedCount % 10, // Resets back to 0 once they hit 10 stamps
+      freeCoffeesEarned: Math.floor(completedCount / 10) 
+    });
+  } catch (error) {
+    fileResponse.status(500).json({ success: false, error: error.message });
+  }
+});
