@@ -352,39 +352,34 @@ nav.navbar a:hover {
     }
 }
 .loyalty-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
+  /* Change background from clear/white to a solid dark blend matching your theme */
+  background: #231610; 
+  padding: 25px;
   border-radius: 12px;
   text-align: center;
   max-width: 450px;
-  margin: 20px auto;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  /* Centering constraints to align directly beneath the main tracking box */
+  margin: 30px auto; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 1px solid #3d251c;
+  
+  /* Ensure inner text layout aligns correctly inside bounds */
+  box-sizing: border-box; 
+  width: 90%; 
+  clear: both;
 }
 
-.stamps-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  margin-top: 15px;
-}
-
-.stamp-slot {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 2px dashed rgba(255, 255, 255, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Make sure headers stand out perfectly */
+.loyalty-card h3 {
+  color: #e6b89c;
+  margin-top: 0;
+  margin-bottom: 8px;
   font-size: 22px;
-  transition: all 0.3s ease;
 }
 
-/* When a slot has a stamp active */
-.stamp-slot.active {
-  background: #e6b89c;
-  border-style: solid;
-  border-color: #e6b89c;
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(230, 184, 156, 0.3);
+.loyalty-card p {
+  color: #d1bfa7;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
