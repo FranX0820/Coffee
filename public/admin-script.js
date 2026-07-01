@@ -57,34 +57,37 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         tbody.appendChild(row);
 
-        // Attach click handler for deleting/serving the row
+        // Attach click handler for serving the row
         const serveButton = row.querySelector(".serve-btn");
         serveButton.addEventListener("click", async () => {
           serveButton.innerText = "Serving...";
           serveButton.disabled = true;
 
           try {
-            
-            const deleteResponse = await fetch(
+            // ✅ Fixed: Renamed to serveResponse to match the PUT action
+            const serveResponse = await fetch(
               `https://coffee-1zpr.onrender.com/api/orders/${order._id}/serve`,
               {
                 method: "PUT",
               },
             );
-            const deleteResult = await deleteResponse.json();
+            const serveResult = await serveResponse.json();
 
-            if (deleteResult.success) {
+            if (serveResult.success) {
               row.remove();
               if (tbody.children.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No orders found in database yet.</td></tr>`;
               }
             } else {
-              alert("Failed to delete order.");
+              // ✅ Fixed: Corrected text alert to accurately match serving errors
+              alert(
+                "Failed to update order status to served: " + serveResult.error,
+              );
               serveButton.innerText = "Serve";
               serveButton.disabled = false;
             }
           } catch (error) {
-            console.error("Delete error:", error);
+            console.error("Serve route error:", error);
             alert("Could not connect to server.");
             serveButton.innerText = "Serve";
             serveButton.disabled = false;
