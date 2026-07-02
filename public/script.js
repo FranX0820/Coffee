@@ -101,73 +101,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Render basket layout contents on page load immediately
   renderCart();
-});
-// ==========================================
-// 3. SUBMIT THE FULL BASKET TO BACKEND
-// ==========================================
-if (orderBtn) {
-  orderBtn.addEventListener("click", async (e) => {
-    e.preventDefault(); // Stop the page from refreshing/reflashing
 
-    // Guard check: Don't let them order an empty basket
-    if (cart.length === 0) {
-      alert("Your basket is empty! Add some coffee before checking out.");
-      return;
-    }
+  // ==========================================
+  // 3. SUBMIT THE FULL BASKET TO BACKEND
+  // ==========================================
+  if (orderBtn) {
+    orderBtn.addEventListener("click", async (e) => {
+      e.preventDefault(); // Stop the page from refreshing/reflashing
 
-    const emailField = document.getElementById("user-email");
-    if (!emailField || !emailField.value.trim()) {
-      alert("Please enter your email address to track your order rewards.");
-      return;
-    }
+      // Guard check: Don't let them order an empty basket
+      if (cart.length === 0) {
+        alert("Your basket is empty! Add some coffee before checking out.");
+        return;
+      }
 
-    // Pack up our exact backend schema data payload structure
-    const orderData = {
-      email: emailField.value.trim(),
-      notes: document.getElementById("notes")
-        ? document.getElementById("notes").value
-        : "",
-      items: cart, // 📦 Sends the full multi-item array list directly!
-      totalPrice: cart.reduce((sum, item) => sum + item.price, 0),
-    };
+      const emailField = document.getElementById("user-email");
+      if (!emailField || !emailField.value.trim()) {
+        alert("Please enter your email address to track your order rewards.");
+        return;
+      }
 
-    console.log("Sending entire basket to server:", orderData);
+      // Pack up our exact backend schema data payload structure
+      const orderData = {
+        email: emailField.value.trim(),
+        notes: document.getElementById("notes")
+          ? document.getElementById("notes").value
+          : "",
+        items: cart, // 📦 Sends the full multi-item array list directly!
+        totalPrice: cart.reduce((sum, item) => sum + item.price, 0),
+      };
 
-    try {
-      orderBtn.innerText = "Processing Order...";
-      orderBtn.disabled = true;
+      console.log("Sending entire basket to server:", orderData);
 
-      const response = await fetch(
-        "https://coffee-1zpr.onrender.com/api/orders",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(orderData),
-        },
-      );
+      try {
+        orderBtn.innerText = "Processing Order...";
+        orderBtn.disabled = true;
 
-      const result = await response.json();
-      console.log("Server basket response:", result);
+        const response = await fetch(
+          "https://coffee-1zpr.onrender.com/api/orders",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+          },
+        );
 
-      if (result.success) {
-        // 🧹 Clear out browser's local basket memory cache on success!
-        localStorage.removeItem("coffeeCart");
+        const result = await response.json();
+        console.log("Server basket response:", result);
 
-        // Instantly send them to your live tracker page with the fresh order ID
-        const orderId = result.data._id;
-        window.location.href = `track.html?id=${orderId}`;
-      } else {
-        alert("Server Error: " + result.error);
+        if (result.success) {
+          // 🧹 Clear out browser's local basket memory cache on success!
+          localStorage.removeItem("coffeeCart");
+
+          // Instantly send them to your live tracker page with the fresh order ID
+          const orderId = result.data._id;
+          window.location.href = `track.html?id=${orderId}`;
+        } else {
+          alert("Server Error: " + result.error);
+          orderBtn.innerText = "Complete Order";
+          orderBtn.disabled = false;
+        }
+      } catch (error) {
+        console.error("Error sending basket to server:", error);
+        alert(
+          "Could not connect to the server. Make sure your backend service is awake!",
+        );
         orderBtn.innerText = "Complete Order";
         orderBtn.disabled = false;
       }
-    } catch (error) {
-      console.error("Error sending basket to server:", error);
-      alert(
-        "Could not connect to the server. Make sure your backend service is awake!",
-      );
-      orderBtn.innerText = "Complete Order";
-      orderBtn.disabled = false;
-    }
-  });
-}
+    });
+  }
+});
