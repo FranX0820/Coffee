@@ -191,7 +191,7 @@ app.put("/api/orders/:id/serve", async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.id,
-      { status: "Served" }, // Sync with your tracking page logic
+      { status: "Served" },
       { new: true },
     );
 
@@ -199,11 +199,18 @@ app.put("/api/orders/:id/serve", async (req, res) => {
       return res.status(404).json({ success: false, error: "Order not found" });
     }
 
-    // ✅ Fix: Pull customer details dynamically from the updated order document
+    // ✅ FIX: Safely compile a list of all items for the email notification
+    let coffeeListText = "Your Coffee Order";
+    if (updatedOrder.items && updatedOrder.items.length > 0) {
+      coffeeListText = updatedOrder.items
+        .map(
+          (item) =>
+            `${item.quantity}x ${item.coffeeType.toUpperCase()} (${item.size.toUpperCase()})`,
+        )
+        .join(", ");
+    }
+
     const customerEmail = updatedOrder.email;
-    const coffeeName = updatedOrder.coffeeType
-      ? updatedOrder.coffeeType.toUpperCase()
-      : "Coffee";
     const totalAmount = updatedOrder.totalPrice
       ? updatedOrder.totalPrice.toFixed(2)
       : "0.00";
@@ -216,7 +223,7 @@ app.put("/api/orders/:id/serve", async (req, res) => {
       html: `
         <h3>Your order is ready for pickup!</h3>
         <p>Hi Customer,</p>
-        <p>Your freshly brewed <strong>${coffeeName}</strong> (${updatedOrder.size.toUpperCase()}) is on the counter and ready for you.</p>
+        <p>Your freshly brewed order: <strong>${coffeeListText}</strong> is on the counter and ready for you.</p>
         <p><strong>Total Paid:</strong> $${totalAmount}</p>
         <br>
         <p>Thank you for brewing with us!</p>
@@ -242,14 +249,15 @@ app.put("/api/orders/:id/serve", async (req, res) => {
       data: updatedOrder,
     });
   } catch (error) {
-    console.error("Backend Error in serve route:", error); // Logs the real error in Render console
-    res.status(500).json({
-      success: false,
-      error: "Failed to update order status: " + error.message,
-    });
+    console.error("Backend Error in serve route:", error);
+    res
+      .status(500)
+      .json({
+        success: false,
+        error: "Failed to update order status: " + error.message,
+      });
   }
 });
-
 // 7. Initialize listener loop pipeline (ALWAYS STAYS AT THE VERY BOTTOM)
 const PORT = 5000;
 app.listen(PORT, () => {
