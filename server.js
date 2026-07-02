@@ -34,7 +34,7 @@ const transporter = nodemailer.createTransport(
 );
 
 // 5. Connect to Local MongoDB Setup
-// 5. Connect to Local MongoDB Setup
+
 mongoose
   .connect(
     "mongodb+srv://mohuaduttajsr0820_db_user:Mohua@cluster0.ragpkby.mongodb.net/coffeeShopDB?retryWrites=true&w=majority&appName=Cluster0",
@@ -51,31 +51,59 @@ app.post("/api/orders", async (req, res) => {
     const newOrder = new Order(orderData);
     const savedOrder = await newOrder.save();
 
+    // 📦 Generate an HTML list item for every single beverage in the basket
+    const orderItemsHtml = savedOrder.items
+      .map(
+        (item) => `
+        <li>
+          <strong>${item.quantity}x ${item.coffeeType.toUpperCase()}</strong> (${item.size.toUpperCase()}) - $${item.price.toFixed(2)}
+        </li>
+      `,
+      )
+      .join("");
+
     // ☕ EMAIL DISPATCH 1: ORDER CONFIRMED
     const mailOptions = {
       from: "mohuaduttajsr0820@gmail.com",
       to: String(savedOrder.email).trim(),
       subject: "Your Coffee Order is Cooking! ☕🔥",
       html: `
-                <h3>Order Confirmed!</h3>
-                <p>Hi there! We have received your order for a fresh <strong>${savedOrder.size.toUpperCase()} ${savedOrder.coffeeType.toUpperCase()}</strong>.</p>
-                <p>Our baristas are steaming up the milk right now. You can track your progress live on your dashboard tracking application!</p>
-                <br>
-                <p>Warmly,<br><strong>The Coffee. Team</strong></p>
-            `,
+        <h3>Order Confirmed!</h3>
+        <p>Hi there! We have successfully received your basket order:</p>
+        
+        <ul style="padding-left: 20px; color: #333;">
+          ${orderItemsHtml}
+        </ul>
+
+        <p><strong>Total Bill Amount:</strong> $${savedOrder.totalPrice.toFixed(2)}</p>
+        <p>Our baristas are steaming up the milk right now. You can track your progress live on your dashboard tracking application!</p>
+        <br>
+        <p>Warmly,<br><strong>The Coffee Team</strong></p>
+      `,
     };
 
-    // Fire the email asynchronously
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) console.error("Order Creation Email Failure:", err);
+    // Fire the confirmation email asynchronously
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.error("🔴 ORDER CONFIRMATION EMAIL FAILURE:", err);
+      } else {
+        console.log(
+          "✅ Confirmation email successfully dispatched:",
+          info.response,
+        );
+      }
     });
 
-    res.status(201).json({ success: true, data: savedOrder });
+    res.status(201).json({
+      success: true,
+      message: "Basket order recorded successfully!",
+      data: savedOrder,
+    });
   } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
+    console.error("Error creating order:", error);
+    res.status(500).json({ success: false, error: error.message });
   }
 });
-
 // Route B: Submit a new review & trigger automated thank you email dispatch
 app.post("/api/reviews", async (req, res) => {
   try {
@@ -215,12 +243,10 @@ app.put("/api/orders/:id/serve", async (req, res) => {
     });
   } catch (error) {
     console.error("Backend Error in serve route:", error); // Logs the real error in Render console
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: "Failed to update order status: " + error.message,
-      });
+    res.status(500).json({
+      success: false,
+      error: "Failed to update order status: " + error.message,
+    });
   }
 });
 
