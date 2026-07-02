@@ -199,23 +199,16 @@ app.put("/api/orders/:id/serve", async (req, res) => {
       return res.status(404).json({ success: false, error: "Order not found" });
     }
 
-    // ✅ FIX: Safely compile a list of all items for the email notification
+    // Compile simple text summary of items ordered
     let coffeeListText = "Your Coffee Order";
     if (updatedOrder.items && updatedOrder.items.length > 0) {
       coffeeListText = updatedOrder.items
-        .map(
-          (item) =>
-            `${item.quantity}x ${item.coffeeType.toUpperCase()} (${item.size.toUpperCase()})`,
-        )
+        .map((item) => `${item.quantity}x ${item.coffeeType.toUpperCase()}`)
         .join(", ");
     }
 
     const customerEmail = updatedOrder.email;
-    const totalAmount = updatedOrder.totalPrice
-      ? updatedOrder.totalPrice.toFixed(2)
-      : "0.00";
 
-    // Setup the correct order confirmation email layout rules
     const mailOptions = {
       from: "mohuaduttajsr0820@gmail.com",
       to: String(customerEmail).trim(),
@@ -224,22 +217,17 @@ app.put("/api/orders/:id/serve", async (req, res) => {
         <h3>Your order is ready for pickup!</h3>
         <p>Hi Customer,</p>
         <p>Your freshly brewed order: <strong>${coffeeListText}</strong> is on the counter and ready for you.</p>
-        <p><strong>Total Paid:</strong> $${totalAmount}</p>
         <br>
         <p>Thank you for brewing with us!</p>
         <p><strong>The Coffee Team</strong></p>
       `,
     };
 
-    // Fire the email asynchronously
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
         console.error("🔴 ORDER SERVED EMAIL FAILURE:", err);
       } else {
-        console.log(
-          "✅ Order pickup email successfully sent via SendGrid:",
-          info.response,
-        );
+        console.log("✅ Order pickup email successfully sent:", info.response);
       }
     });
 
@@ -249,13 +237,9 @@ app.put("/api/orders/:id/serve", async (req, res) => {
       data: updatedOrder,
     });
   } catch (error) {
-    console.error("Backend Error in serve route:", error);
     res
       .status(500)
-      .json({
-        success: false,
-        error: "Failed to update order status: " + error.message,
-      });
+      .json({ success: false, error: "Failed to update order status" });
   }
 });
 // 7. Initialize listener loop pipeline (ALWAYS STAYS AT THE VERY BOTTOM)

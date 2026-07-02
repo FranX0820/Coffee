@@ -351,35 +351,3 @@ nav.navbar a:hover {
         display: flex ;
     }
 }
-.loyalty-card {
-  /* Change background from clear/white to a solid dark blend matching your theme */
-  background: #231610; 
-  padding: 25px;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 450px;
-  
-  /* Centering constraints to align directly beneath the main tracking box */
-  margin: 30px auto; 
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  border: 1px solid #3d251c;
-  
-  /* Ensure inner text layout aligns correctly inside bounds */
-  box-sizing: border-box; 
-  width: 90%; 
-  clear: both;
-}
-
-/* Make sure headers stand out perfectly */
-.loyalty-card h3 {
-  color: #e6b89c;
-  margin-top: 0;
-  margin-bottom: 8px;
-  font-size: 22px;
-}
-
-.loyalty-card p {
-  color: #d1bfa7;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
