@@ -163,35 +163,46 @@ app.put("/api/orders/:id/serve", async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.id,
-      { status: "completed" },
+      { status: "Served" }, // Sync with your tracking page logic
       { new: true },
     );
 
     if (!updatedOrder) {
       return res.status(404).json({ success: false, error: "Order not found" });
     }
-    // Setup the specific email layout rules
+
+    // ✅ Fix: Pull customer details dynamically from the updated order document
+    const customerEmail = updatedOrder.email;
+    const coffeeName = updatedOrder.coffeeType
+      ? updatedOrder.coffeeType.toUpperCase()
+      : "Coffee";
+    const totalAmount = updatedOrder.totalPrice
+      ? updatedOrder.totalPrice.toFixed(2)
+      : "0.00";
+
+    // Setup the correct order confirmation email layout rules
     const mailOptions = {
       from: "mohuaduttajsr0820@gmail.com",
-      to: String(email).trim(), // 👈 CHANGE THIS: Send it to the customer who left the review!
-      subject: `Thank you for your review, ${name}! ☕`,
+      to: String(customerEmail).trim(),
+      subject: `Your Coffee is Ready! ☕✨`,
       html: `
-        <h3>We appreciate your feedback!</h3>
-        <p>Hi ${name},</p>
-        <p>Thank you for giving us a <strong>${rating} / 5 Star</strong> rating.</p>
-        <p>Your comments help our baristas keep brewing the best coffee around: "${comment}"</p>
+        <h3>Your order is ready for pickup!</h3>
+        <p>Hi Customer,</p>
+        <p>Your freshly brewed <strong>${coffeeName}</strong> (${updatedOrder.size.toUpperCase()}) is on the counter and ready for you.</p>
+        <p><strong>Total Paid:</strong> $${totalAmount}</p>
         <br>
-        <p>Warm regards,</p>
+        <p>Thank you for brewing with us!</p>
         <p><strong>The Coffee Team</strong></p>
       `,
     };
+
     // Fire the email asynchronously
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
-        console.error("🔴 REVIEW EMAIL FAILURE:", err);
+        console.error("🔴 ORDER SERVED EMAIL FAILURE:", err);
       } else {
         console.log(
-          "✅ Review email successfully sent via SendGrid:",
+          "✅ Order pickup email successfully sent via SendGrid:",
           info.response,
         );
       }
@@ -203,9 +214,13 @@ app.put("/api/orders/:id/serve", async (req, res) => {
       data: updatedOrder,
     });
   } catch (error) {
+    console.error("Backend Error in serve route:", error); // Logs the real error in Render console
     res
       .status(500)
-      .json({ success: false, error: "Failed to update order status" });
+      .json({
+        success: false,
+        error: "Failed to update order status: " + error.message,
+      });
   }
 });
 
@@ -218,18 +233,18 @@ app.listen(PORT, () => {
 app.get("/api/loyalty/:email", async (fileRequest, fileResponse) => {
   try {
     const customerEmail = fileRequest.params.email.trim();
-    
+
     // Count how many orders under this email are marked as completed/served
     // Note: Change "Served" to match your exact database status string if different
-    const completedCount = await Order.countDocuments({ 
-      email: customerEmail, 
-      status: "Served" 
+    const completedCount = await Order.countDocuments({
+      email: customerEmail,
+      status: "Served",
     });
 
-    fileResponse.json({ 
-      success: true, 
+    fileResponse.json({
+      success: true,
       stamps: completedCount % 10, // Resets back to 0 once they hit 10 stamps
-      freeCoffeesEarned: Math.floor(completedCount / 10) 
+      freeCoffeesEarned: Math.floor(completedCount / 10),
     });
   } catch (error) {
     fileResponse.status(500).json({ success: false, error: error.message });
