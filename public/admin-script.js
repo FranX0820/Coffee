@@ -43,14 +43,36 @@ document.addEventListener("DOMContentLoaded", async () => {
           ? new Date(order.createdAt).toLocaleString()
           : "Invalid Date";
 
+        // 📦 Safe dynamic item compiler: processes multiple basket items neatly
+        let itemsSummary = "";
+        if (order.items && order.items.length > 0) {
+          itemsSummary = order.items
+            .map((item) => `${item.quantity}x ${item.coffeeType.toUpperCase()}`)
+            .join("<br>"); // Places each distinct item item on a clean new row line
+        } else if (order.coffeeType) {
+          itemsSummary = `1x ${order.coffeeType.toUpperCase()}`; // Fallback for your oldest single-item db entries
+        } else {
+          itemsSummary = "No Items Found";
+        }
+
+        // Safe size compiler fallback
+        let sizeSummary = "";
+        if (order.items && order.items.length > 0) {
+          sizeSummary = order.items
+            .map((item) => item.size.toUpperCase())
+            .join("<br>");
+        } else {
+          sizeSummary = order.size ? order.size.toUpperCase() : "REGULAR";
+        }
+
         row.innerHTML = `
-                    <td style="font-family: monospace; font-size: 12px; color: #a89f91; padding: 14px;">${order._id}</td>
-                    <td style="font-weight: bold; color: #e6b89c; padding: 14px;">${order.coffeeType.toUpperCase()}</td>
-                    <td style="padding: 14px;">${order.size.toUpperCase()}</td>
-                    <td style="font-style: italic; padding: 14px;">${order.notes || "None"}</td>
-                    <td style="font-weight: bold; color: #e6b89c; padding: 14px;">$${order.totalPrice.toFixed(2)}</td>
-                    <td style="padding: 14px;">${orderDate}</td>
-                    <td style="padding: 14px;">
+                    <td style="font-family: monospace; font-size: 12px; color: #a89f91; padding: 14px; vertical-align: top;">${order._id}</td>
+                    <td style="font-weight: bold; color: #e6b89c; padding: 14px; vertical-align: top; line-height: 1.4;">${itemsSummary}</td>
+                    <td style="padding: 14px; vertical-align: top; line-height: 1.4;">${sizeSummary}</td>
+                    <td style="font-style: italic; padding: 14px; vertical-align: top;">${order.notes || "None"}</td>
+                    <td style="font-weight: bold; color: #e6b89c; padding: 14px; vertical-align: top;">$${(order.totalPrice || 0).toFixed(2)}</td>
+                    <td style="padding: 14px; vertical-align: top;">${orderDate}</td>
+                    <td style="padding: 14px; vertical-align: top;">
                         <button class="serve-btn" style="background-color: #e6b89c; color: #2c1a11; border: none; padding: 6px 12px; font-weight: bold; border-radius: 4px; cursor: pointer;">Serve</button>
                     </td>
                 `;
@@ -64,7 +86,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           serveButton.disabled = true;
 
           try {
-            // ✅ Fixed: Renamed to serveResponse to match the PUT action
             const serveResponse = await fetch(
               `https://coffee-1zpr.onrender.com/api/orders/${order._id}/serve`,
               {
@@ -79,7 +100,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No orders found in database yet.</td></tr>`;
               }
             } else {
-              // ✅ Fixed: Corrected text alert to accurately match serving errors
               alert(
                 "Failed to update order status to served: " + serveResult.error,
               );
