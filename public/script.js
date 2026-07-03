@@ -120,48 +120,29 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Please enter your email address to track your order rewards.");
         return;
       }
+
       // ⏱️ Calculate total brewing time (e.g., 2 mins per item base + 1 min for large sizes)
       let totalBrewTimeMinutes = 0;
-      cart.forEach((item) => {
+      cart.forEach(item => {
         let baseTime = 2; // 2 minutes for regular drinks
-        if (
-          item.coffeeType.includes("latte") ||
-          item.coffeeType.includes("cappuccino")
-        ) {
+        if (item.coffeeType.includes("latte") || item.coffeeType.includes("cappuccino")) {
           baseTime = 3; // 3 minutes for milk-steaming drinks
         }
         let sizeExtraTime = item.size.toLowerCase() === "large" ? 1 : 0;
-
+        
         totalBrewTimeMinutes += (baseTime + sizeExtraTime) * item.quantity;
       });
 
       // Target completion timestamp = Current Time + total brew minutes
-      const estimatedReadyAt = new Date(
-        Date.now() + totalBrewTimeMinutes * 60000,
-      );
+      const estimatedReadyAt = new Date(Date.now() + totalBrewTimeMinutes * 60000);
 
-      // Pack up our exact backend schema data payload structure
+      // Pack up our exact backend schema data payload structure cleanly (Only ONE declaration!)
       const orderData = {
         email: emailField.value.trim(),
-        notes: document.getElementById("notes")
-          ? document.getElementById("notes").value
-          : "",
+        notes: document.getElementById("notes") ? document.getElementById("notes").value : "",
         items: cart,
         totalPrice: cart.reduce((sum, item) => sum + item.price, 0),
-        estimatedReadyAt: estimatedReadyAt, // ⏱️ Passes our target brew countdown timer directly!
-      };
-
-      // Let's attach estimatedReadyAt to orderData safely
-      orderData.estimatedReadyAt = estimatedReadyAt;
-
-      // Pack up our exact backend schema data payload structure
-      const orderData = {
-        email: emailField.value.trim(),
-        notes: document.getElementById("notes")
-          ? document.getElementById("notes").value
-          : "",
-        items: cart, // 📦 Sends the full multi-item array list directly!
-        totalPrice: cart.reduce((sum, item) => sum + item.price, 0),
+        estimatedReadyAt: estimatedReadyAt // ⏱️ Passes our target brew countdown timer directly!
       };
 
       console.log("Sending entire basket to server:", orderData);
@@ -170,14 +151,11 @@ document.addEventListener("DOMContentLoaded", () => {
         orderBtn.innerText = "Processing Order...";
         orderBtn.disabled = true;
 
-        const response = await fetch(
-          "https://coffee-1zpr.onrender.com/api/orders",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(orderData),
-          },
-        );
+        const response = await fetch("https://coffee-1zpr.onrender.com/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData)
+        });
 
         const result = await response.json();
         console.log("Server basket response:", result);
@@ -185,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (result.success) {
           // 🧹 Clear out browser's local basket memory cache on success!
           localStorage.removeItem("coffeeCart");
-
+          
           // Instantly send them to your live tracker page with the fresh order ID
           const orderId = result.data._id;
           window.location.href = `track.html?id=${orderId}`;
@@ -196,9 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error("Error sending basket to server:", error);
-        alert(
-          "Could not connect to the server. Make sure your backend service is awake!",
-        );
+        alert("Could not connect to the server. Make sure your backend service is awake!");
         orderBtn.innerText = "Complete Order";
         orderBtn.disabled = false;
       }
