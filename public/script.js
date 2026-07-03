@@ -120,6 +120,42 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Please enter your email address to track your order rewards.");
         return;
       }
+      // ⏱️ Calculate total brewing time (e.g., 2 mins per item base + 1 min for large sizes)
+      let totalBrewTimeMinutes = 0;
+      cart.forEach((item) => {
+        let baseTime = 2; // 2 minutes for regular drinks
+        if (
+          item.coffeeType.includes("latte") ||
+          item.coffeeType.includes("cappuccino")
+        ) {
+          baseTime = 3; // 3 minutes for milk-steaming drinks
+        }
+        let sizeExtraTime = item.size.toLowerCase() === "large" ? 1 : 0;
+
+        totalBrewTimeMinutes += (baseTime + sizeExtraTime) * item.quantity;
+      });
+
+      // Target completion timestamp = Current Time + total brew minutes
+      const estimatedReadyAt = new Date(
+        Date.now() + totalBrewTimeMinutes * 60000,
+      );
+
+      // Pack up our exact backend schema data payload structure
+      const orderData = {
+        email: emailField.value.trim(),
+        notes: document.getElementById("notes")
+          ? document.getElementById("notes").value
+          : "",
+        items: cart,
+        totalPrice: cart.reduce((sum, item) => sum + item.price, 0),
+        // 📥 ADD THIS LINE to send the target time to your database!
+        notes: document.getElementById("notes")
+          ? document.getElementById("notes").value
+          : "",
+      };
+
+      // Let's attach estimatedReadyAt to orderData safely
+      orderData.estimatedReadyAt = estimatedReadyAt;
 
       // Pack up our exact backend schema data payload structure
       const orderData = {
