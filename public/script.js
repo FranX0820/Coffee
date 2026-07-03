@@ -148,10 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
           : "",
         items: cart,
         totalPrice: cart.reduce((sum, item) => sum + item.price, 0),
-        // 📥 ADD THIS LINE to send the target time to your database!
-        notes: document.getElementById("notes")
-          ? document.getElementById("notes").value
-          : "",
+        estimatedReadyAt: estimatedReadyAt, // ⏱️ Passes our target brew countdown timer directly!
       };
 
       // Let's attach estimatedReadyAt to orderData safely
